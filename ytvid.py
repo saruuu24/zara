@@ -7,7 +7,7 @@ from pathlib import Path
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
 app = customtkinter.CTk()
-app.geometry("720x480")
+app.geometry("1600x880")
 app.title("codename : azuki")
 
 title = customtkinter.CTkLabel(app, text = "Please enter a youtube link to download it locally")
