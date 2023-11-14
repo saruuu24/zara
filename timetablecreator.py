@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageTk
 class TimetableApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Timetable Generator")
+        self.root.title("Zara Timetable Generator")
 
         self.style = Style(theme="superhero")
 

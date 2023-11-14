@@ -5,7 +5,7 @@ from ttkbootstrap import Style
 
 # Create the main window
 root = tk.Tk()
-root.title("Notes App")
+root.title("Zara Notes App")
 root.geometry("900x800")
 style = Style(theme='superhero')
 style = ttk.Style()

@@ -5,7 +5,7 @@ from ttkbootstrap import Style
 class TodoApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("To-Do List")
+        self.root.title(" Zara To-Do List")
 
         self.style = Style(theme="superhero")  # Use the superhero theme
 

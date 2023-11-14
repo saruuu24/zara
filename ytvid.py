@@ -8,13 +8,13 @@ customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
 app = customtkinter.CTk()
 app.geometry("1600x880")
-app.title("codename : azuki")
+app.title("zara - youtube video dowloader")
 
 title = customtkinter.CTkLabel(app, text = "Please enter a youtube link to download it locally")
 title.pack(padx= 40, pady = 40)
 
 urlstring = tkinter.StringVar()
-link = customtkinter.CTkEntry(app, width=450, height=40, textvariable=urlstring, corner_radius=20)
+link = customtkinter.CTkEntry(app, width=450, height=40, textvariable=urlstring, corner_radius=18)
 link.pack(padx=5, pady=5)
 
 def download():
