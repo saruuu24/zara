@@ -37,16 +37,16 @@ class Window(MaterialWindow):
         self.initWindow()
 
     def initNavigation(self):
-        self.addSubInterface(self.homeInterface, FIF.HOME, '主页', FIF.HOME_FILL)
-        self.addSubInterface(self.appInterface, FIF.APPLICATION, '应用')
-        self.addSubInterface(self.videoInterface, FIF.VIDEO, '视频')
+        self.addSubInterface(self.homeInterface, FIF.HOME, 'Home', FIF.HOME_FILL)
+        self.addSubInterface(self.appInterface, FIF.APPLICATION, 'App')
+        self.addSubInterface(self.videoInterface, FIF.VIDEO, 'Videos')
 
-        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, '库', FIF.LIBRARY_FILL,
+        self.addSubInterface(self.libraryInterface, FIF.BOOK_SHELF, 'Other', FIF.LIBRARY_FILL,
                              NavigationItemPosition.BOTTOM)
         self.navigationInterface.addItem(
             routeKey='Help',
             icon=FIF.HELP,
-            text='帮助',
+            text='Help',
             onClick=self.showMessageBox,
             selectable=False,
             position=NavigationItemPosition.BOTTOM,
@@ -56,8 +56,8 @@ class Window(MaterialWindow):
 
     def initWindow(self):
         self.resize(900, 700)
-        self.setWindowIcon(QIcon(':/qmaterialwidgets/images/logo.png'))
-        self.setWindowTitle('PySide-Material-Widgets')
+        self.setWindowIcon(QIcon('logo.png'))
+        self.setWindowTitle('Zara - the students app')
 
         desktop = QApplication.screens()[0].availableGeometry()
         w, h = desktop.width(), desktop.height()
