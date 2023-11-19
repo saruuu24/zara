@@ -9,7 +9,7 @@ class TimetableApp:
         self.root = root
         self.root.title("Zara Timetable Generator")
 
-        self.style = Style(theme="superhero")
+        self.style = Style(theme="vapor")
 
         self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         self.periods = ["1", "2", "3", "4", "5", "6", "7", "8"]
@@ -67,7 +67,7 @@ class TimetableApp:
     def generate_timetable(self):
         image = self.create_timetable_image()
         image.show()  # Display the generated timetable (optional)
-        image.save("timetable.png", "PNG")
+        image.save("timetable.png", "png")
         print("Timetable saved as 'timetable.png'")
 
         # Update the label when the timetable is saved

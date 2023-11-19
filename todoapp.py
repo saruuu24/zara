@@ -7,7 +7,7 @@ class TodoApp:
         self.root = root
         self.root.title(" Zara To-Do List")
 
-        self.style = Style(theme="superhero")  # Use the superhero theme
+        self.style = Style(theme="vapor")  # Use the superhero theme
 
         self.tasks = []
 
