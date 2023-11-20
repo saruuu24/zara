@@ -1,10 +1,22 @@
+import threading
+import time
 import gi
 import os
 import subprocess
-
+import PIL
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GdkPixbuf, Gdk
 
+
+class SplashScreen(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Splash Screen", decorated=False)
+        self.set_default_size(400, 300)
+
+        image = Gtk.Image.new_from_file("zara.gif")  # Replace with your splash screen GIF path
+        self.add(image)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.connect("destroy", Gtk.main_quit)
 class PythonFileOpener(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Zara - The Student's App")
@@ -69,7 +81,25 @@ class PythonFileOpener(Gtk.Window):
         else:
             print(f"Error: {py_file_path} not found.")
 
-win = PythonFileOpener()
-win.connect("destroy", Gtk.main_quit)
-win.show_all()
+def open_main_app():
+    # Wait for 3 seconds (adjust as needed)
+    time.sleep(3)
+
+    # Close the splash screen
+    splash_screen.hide()
+    splash_screen.destroy()
+
+    # Open the main application
+    main_app = PythonFileOpener()
+    main_app.connect("destroy", Gtk.main_quit)
+    main_app.show_all()
+    Gtk.main()
+
+# Create and show the splash screen
+splash_screen = SplashScreen()
+splash_screen.show_all()
+
+# Start a thread to open the main application
+threading.Thread(target=open_main_app).start()
+
 Gtk.main()
