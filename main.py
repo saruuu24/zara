@@ -20,7 +20,7 @@ class SplashScreen(Gtk.Window):
 class PythonFileOpener(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Zara - The Student's App")
-        self.set_default_size(400, 300)
+        self.set_default_size(300, 200)
         # Set the icon for the window
         icon_path = "logo.png"  # Replace with the path to your icon file
         if os.path.exists(icon_path):

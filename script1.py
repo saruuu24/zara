@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 customtkinter.set_appearance_mode("System")
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_default_color_theme("blue")
 app = customtkinter.CTk()
 app.geometry("1600x880")
 app.title("zara - youtube video dowloader")

@@ -9,7 +9,7 @@ class TimetableApp:
         self.root = root
         self.root.title("Zara Timetable Generator")
 
-        self.style = Style(theme="vapor")
+        self.style = Style(theme="flatly")
 
         self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         self.periods = ["1", "2", "3", "4", "5", "6", "7", "8"]

@@ -7,7 +7,7 @@ from ttkbootstrap import Style
 root = tk.Tk()
 root.title("Zara Notes App")
 root.geometry("900x800")
-style = Style(theme='vapor')
+style = Style(theme='flatly')
 style = ttk.Style()
 
 # Configure the tab font to be bold

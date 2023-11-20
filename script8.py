@@ -48,7 +48,7 @@ class MorseCodeTranslatorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Morse Code Translator")
-        self.style = Style(theme="vapor")  # You can choose a different theme if you like
+        self.style = Style(theme="flatly")  # You can choose a different theme if you like
 
         self.create_widgets()
 

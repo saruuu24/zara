@@ -11,7 +11,7 @@ class ArticleSummarizerApp:
         self.master = master
         master.title("Article Summarizer")
 
-        style = Style('vapor')  # You can choose a different theme from ttkbootstrap
+        style = Style('flatly')  # You can choose a different theme from ttkbootstrap
 
         self.url_label = ttk.Label(master, text="Enter Article URL:")
         self.url_label.grid(row=0, column=0, pady=10, padx=10, sticky="w")
