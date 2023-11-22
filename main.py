@@ -1,105 +1,64 @@
-import threading
-import time
-import gi
 import os
-import subprocess
-import PIL
-gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GdkPixbuf, Gdk
-
-
-class SplashScreen(Gtk.Window):
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt
+class FileOpenerApp(QWidget):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Splash Screen", decorated=False)
-        self.set_default_size(400, 300)
+        super().__init__()
 
-        image = Gtk.Image.new_from_file("zara.gif")  # Replace with your splash screen GIF path
-        self.add(image)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.connect("destroy", Gtk.main_quit)
-class PythonFileOpener(Gtk.Window):
-    def __init__(self):
-        Gtk.Window.__init__(self, title="Zara - The Student's App")
-        self.set_default_size(300, 200)
-        # Set the icon for the window
-        icon_path = "logo.png"  # Replace with the path to your icon file
-        if os.path.exists(icon_path):
-            self.set_icon_from_file(icon_path)
+        self.initUI()
 
-        # Set the layout
-        grid = Gtk.Grid()
-        grid.set_column_spacing(20)
-        grid.set_row_spacing(20)
-        grid.set_row_homogeneous(True)  # Make rows have equal height
+    def initUI(self):
+        # Set up the layout
+        main_layout = QVBoxLayout()
 
-        self.add(grid)
+        # Add an icon for the program
+        self.setWindowIcon(QIcon("logo.png"))
 
-        # Create buttons
-        buttons = [
-            {"label": "Save videos locally", "icon": "icon1.png"},
-            {"label": "Focus Mode", "icon": "icon2.png"},
-            {"label": "Sticky Notes", "icon": "icon3.png"},
-            {"label": "Generate a timetable", "icon": "icon4.png"},
-            {"label": "Get summary from a news article", "icon": "icon5.png"},
-            {"label": "Create a Todo list", "icon": "icon6.png"},
-            {"label": "Video Summary", "icon": "icon7.png"},
-            {"label": "Morse Code Decrypter (i know its useless)", "icon": "icon8.png"},
+        # Add a QLabel for displaying a GIF
+        gif_label = QLabel(self)
+        gif_pixmap = QPixmap("zara.gif")
+        gif_label.setPixmap(gif_pixmap)
+        gif_label.setAlignment(Qt.AlignCenter)
+
+        # Define the button names, icons, and file names
+        button_info = [
+            ("Button 1", "icon1.png", "script1.py"),
+            ("Button 2", "icon2.png", "script2.py"),
+            ("Button 3", "icon3.png", "script3.py"),
+            ("Button 4", "icon4.png", "script4.py"),
+            ("Button 5", "icon5.png", "script5.py"),
+            ("Button 6", "icon6.png", "script6.py"),
+            ("Button 7", "icon7.png", "script7.py"),
+            ("Button 8", "icon8.png", "script8.py"),
         ]
 
-        for i, button_info in enumerate(buttons):
-            button = Gtk.Button(label=button_info["label"])
-            image = Gtk.Image.new_from_file(button_info["icon"])
-            button.set_image(image)
-            button.set_relief(Gtk.ReliefStyle.NONE)  # Remove button border
+        for name, icon_file, file_name in button_info:
+            button = QPushButton(name, self)
+            icon = QIcon(icon_file)
+            button.setIcon(icon)
+            button.setIconSize(icon.actualSize(icon.availableSizes()[0]))  # Set the icon size
+            button.clicked.connect(lambda _, file=file_name: self.openFile(file))
+            main_layout.addWidget(button)
 
-            button.connect("clicked", self.on_button_clicked, i + 1)
-            grid.attach(button, i % 4, i // 4, 1, 1)
+        # Add the GIF label above the first row of buttons
+        main_layout.addWidget(gif_label)
 
-        # Center the grid in the window
-        align = Gtk.Alignment.new(0.5, 0.5, 0, 0)
-        align.add(grid)
-        self.add(align)
+        self.setLayout(main_layout)
 
-        # Apply some additional styling
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(b"""
-            button {
-                font-size: 14px;
-                padding: 10px;
-            }
-        """)
+        # Set up the main window
+        self.setGeometry(300, 300, 400, 400)
+        self.setWindowTitle('File Opener App')
+        self.show()
 
-        screen = Gdk.Screen.get_default()
-        style_context = Gtk.StyleContext()
-        style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
-    def on_button_clicked(self, widget, button_number):
-        py_file_path = f"script{button_number}.py"
-
-        if os.path.exists(py_file_path):
-            subprocess.Popen(["python3", py_file_path])
+    def openFile(self, file_name):
+        # Check if the file exists in the program directory
+        if os.path.isfile(file_name):
+            os.system(f"python {file_name}")
         else:
-            print(f"Error: {py_file_path} not found.")
+            print(f"File '{file_name}' not found in the program directory.")
 
-def open_main_app():
-    # Wait for 3 seconds (adjust as needed)
-    time.sleep(3)
-
-    # Close the splash screen
-    splash_screen.hide()
-    splash_screen.destroy()
-
-    # Open the main application
-    main_app = PythonFileOpener()
-    main_app.connect("destroy", Gtk.main_quit)
-    main_app.show_all()
-    Gtk.main()
-
-# Create and show the splash screen
-splash_screen = SplashScreen()
-splash_screen.show_all()
-
-# Start a thread to open the main application
-threading.Thread(target=open_main_app).start()
-
-Gtk.main()
+if __name__ == '__main__':
+    app = QApplication([])
+    ex = FileOpenerApp()
+    app.exec_()
