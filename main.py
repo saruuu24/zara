@@ -1,86 +1,92 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QComboBox, QTextEdit
+from PyQt5.QtCore import Qt
+import pyttsx3
+from gtts import gTTS
 import os
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QGridLayout, QPushButton, QLabel
-from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import Qt, QSize
 
-class FileOpenerApp(QWidget):
+class TTSApp(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
-        # Set up the layout
+    def init_ui(self):
+        # Set up the main layout
         main_layout = QVBoxLayout()
 
-        # Add a centered title
-        title_label = QLabel("Zara - A simple app for students", self)
-        title_label.setAlignment(Qt.AlignCenter)
-        title_font = QFont("Gabriola", 20, QFont.Bold)
-        title_label.setFont(title_font)
-        main_layout.addWidget(title_label)
+        # Text input area
+        self.text_edit = QTextEdit(self)
+        main_layout.addWidget(self.text_edit)
 
-        # Add buttons in rows of four
-        button_grid_layout = QGridLayout()
+        # Voice selection
+        voice_layout = QHBoxLayout()
+        voice_label = QLabel("Select Voice:")
+        self.voice_combobox = QComboBox(self)
+        self.populate_voices()
+        voice_layout.addWidget(voice_label)
+        voice_layout.addWidget(self.voice_combobox)
+        main_layout.addLayout(voice_layout)
 
-        # Define the button names, icons, and file names
-        button_info = [
-            ("Locally save videos", "icon1.png", "script1.py"),
-            ("Focus Mode", "icon2.png", "script2.py"),
-            ("Sticky notes", "icon3.png", "script3.py"),
-            ("Timetable generator", "icon4.png", "script4.py"),
-            ("Summarize news articles", "icon5.png", "script5.py"),
-            ("Create todo list", "icon6.png", "script6.py"),
-            ("Voice assistant", "icon7.png", "script7.py"),
-            ("Morse Code decrypter (its useless)", "icon8.png", "script8.py"),
-        ]
-        row, col = 0, 0
-        for name, icon_file, file_name in button_info:
-            button = QPushButton(self)
-            icon = QIcon(icon_file)
-            button.setIcon(icon)
-            button.setIconSize(QSize(256, 256))  # Set the custom icon size
-            button.clicked.connect(lambda _, file=file_name: self.openFile(file))
+        # Buttons
+        button_layout = QHBoxLayout()
+        self.speak_button = QPushButton("Speak", self)
+        self.speak_button.clicked.connect(self.speak_text)
+        button_layout.addWidget(self.speak_button)
 
-            # Set up a QLabel for the button text below the icon
-            label = QLabel(name, self)
-            label.setAlignment(Qt.AlignCenter)
+        # Add layouts to the main layout
+        main_layout.addLayout(button_layout)
 
-            # Remove the border around the button
-            button.setStyleSheet("border: none;")
-
-            # Add the icon and text to the layout
-            button_layout = QVBoxLayout()
-            button_layout.addWidget(button)
-            button_layout.addWidget(label)
-
-            button_grid_layout.addLayout(button_layout, row, col)
-
-            col += 1
-            if col > 3:
-                col = 0
-                row += 1
-
-        main_layout.addLayout(button_grid_layout)
-
+        # Set the main layout
         self.setLayout(main_layout)
 
-        # Set up the main window
-        self.setGeometry(300, 300, 600, 400)
-        self.setWindowTitle('Zara')
+        # Set the window properties
+        self.setWindowTitle('Text-to-Speech App')
+        self.setGeometry(100, 100, 600, 400)
 
-        # Apply the "Windows" style theme
-        QApplication.setStyle("Windows")
+        # Show the window
+        self.show()
 
-    def openFile(self, file_name):
-        # Check if the file exists in the program directory
-        if os.path.isfile(file_name):
-            os.system(f"python {file_name}")
+    def populate_voices(self):
+        # Clear the combobox before populating
+        self.voice_combobox.clear()
+
+        # Use pyttsx3 to get available voices
+        engine = pyttsx3.init()
+        pyttsx3_voices = engine.getProperty('voices')
+
+        # Use gTTS to get available voices
+        gtts_voices = ['en', 'es', 'fr']  # Add language codes as needed
+
+        # Populate the ComboBox with pyttsx3 voices
+        for voice in pyttsx3_voices:
+            self.voice_combobox.addItem(f"pyttsx3: {voice.name}")
+
+        # Populate the ComboBox with gTTS voices
+        for voice in gtts_voices:
+            self.voice_combobox.addItem(f"gTTS: {voice}")
+
+    def speak_text(self):
+        # Get the selected voice
+        selected_voice = self.voice_combobox.currentText()
+
+        # Determine the TTS engine based on the voice selection
+        if selected_voice.startswith("pyttsx3"):
+            engine = pyttsx3.init()
+            engine.setProperty('voice', selected_voice.split(":")[1].strip())
+            text_to_speak = self.text_edit.toPlainText()
+            engine.say(text_to_speak)
+            engine.runAndWait()
+        elif selected_voice.startswith("gTTS"):
+            language_code = selected_voice.split(":")[1].strip()
+            text_to_speak = self.text_edit.toPlainText()
+            tts = gTTS(text=text_to_speak, lang=language_code, slow=False)
+            tts.save("temp.mp3")
+            os.system("start temp.mp3")  # Open the default media player to play the audio
         else:
-            print(f"File '{file_name}' not found in the program directory.")
+            print("Unknown TTS engine")
 
 if __name__ == '__main__':
-    app = QApplication([])
-    ex = FileOpenerApp()
-    ex.show()
-    app.exec_()
+    app = QApplication(sys.argv)
+    tts_app = TTSApp()
+    sys.exit(app.exec_())
