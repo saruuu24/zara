@@ -66,10 +66,13 @@ class FileOpenerApp(QWidget):
         # Set up the main window
         self.setGeometry(300, 300, 600, 400)
         self.setWindowTitle('Zara')
-
+        self.setWindowIcon(QIcon('zara.png'))
         # Apply the "Windows" style theme
         QApplication.setStyle("Windows")
 
+        import ctypes
+        myappid = 'saru.app.zara.0.1'  # arbitrary string
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
     def openFile(self, file_name):
         # Check if the file exists in the program directory
         if os.path.isfile(file_name):
